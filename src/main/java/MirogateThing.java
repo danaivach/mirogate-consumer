@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 // A consumed Mirogate Thing
 class MirogateThing {
@@ -20,6 +21,8 @@ class MirogateThing {
     private static ThingDescription td;
     Map<String, TDCoapObserveRelation> observeRelations = new HashMap<>();
     ReentrantLock observeRelationsLock = new ReentrantLock();
+
+    static Logger LOG = Logger.getLogger(MirogateThing.class.getName());
 
     public MirogateThing(ThingDescription td) {
         MirogateThing.td = td;
@@ -49,7 +52,7 @@ class MirogateThing {
 
                         @Override
                         public void handleError() {
-                            System.out.println("Failed.");
+                            LOG.info("Failed.");
                         }
                     });
 

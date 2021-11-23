@@ -12,11 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 public class App {
 
     public static final String MIROGATE_TD_URL = "https://raw.githubusercontent.com/Interactions-HSG/example-tds/main/tds/mirogate.ttl";
     public static final String LEUBOT_TD_URL = "https://raw.githubusercontent.com/Interactions-HSG/example-tds/main/tds/leubot1.ttl";
+
+    static Logger LOG = Logger.getLogger(App.class.getName());
 
     public static void main(String[] args) throws IOException {
 
@@ -36,16 +39,17 @@ public class App {
         }
 
         // Subscribe for humidity notifications
-        System.out.println("Invoking " + MIRO.readHumidity + "," + TD.observeProperty);
+        LOG.info("Invoking " + MIRO.readHumidity);
         mirogate.exploit(TD.observeProperty, MIRO.readHumidity, humValue -> {
 
-            System.out.println("Read " + MIRO.humidityValue + ": " + humValue.get(MIRO.humidityValue));
+            LOG.info("Read " + MIRO.humidityValue + ": " + humValue.get(MIRO.humidityValue));
             if ((Double) humValue.get(MIRO.humidityValue) >= 35) {
 
                 // Unsubscribe from humidity notifications
                 mirogate.removeObserveRelation(MIRO.readHumidity);
 
                 // Set leubot gripper to 0
+                LOG.info("Invoking " + MINES.setGripper + " 0");
                 Map<String, Integer> gripperValue = new HashMap<>();
                 gripperValue.put(JSONSchema.IntegerSchema, 0);
                 leubot.exploit(TD.invokeAction, MINES.setGripper, gripperValue);

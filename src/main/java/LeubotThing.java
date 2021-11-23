@@ -11,12 +11,15 @@ import ch.unisg.ics.interactions.wot.td.vocabularies.WoTSec;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 // A consumed Leubot Thing
 public class LeubotThing {
 
     private static ThingDescription td;
     private static String apiKey;
+
+    static Logger LOG = Logger.getLogger(LeubotThing.class.getName());
 
     public LeubotThing(ThingDescription td) {
         LeubotThing.td = td;
@@ -59,7 +62,7 @@ public class LeubotThing {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println(request.toString());
+                    LOG.info(request.toString());
                 }
             }
         }
